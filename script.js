@@ -23,6 +23,15 @@ const userComments = [
     {name: 'Варвара Н.', date: '13.02.22 19:22', text: 'Мне нравится как оформлена эта страница! ❤', likes: 75, like: false}
   ];
 
+  function escapeHtml(text) {
+    const escapeText = text
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+        return escapeText
+    };
 
 
 const renderComments = () => {
@@ -33,11 +42,11 @@ const renderComments = () => {
 
         `<li class="comment">
           <div class="comment-header">
-            <div class="title">${comment.name}</div>
+            <div class="title">${escapeHtml(comment.name)}</div>
             <div>${comment.date}</div>
           </div>
           <div class="comment-body">
-            <div class="comment-text">${comment.text}</div>
+            <div class="comment-text">${escapeHtml(comment.text)}</div>
           </div>
           <div class="comment-footer">
             <div class="likes">
@@ -52,8 +61,8 @@ const renderComments = () => {
     const likeButtons = document.querySelectorAll('.like-button');
 
     likeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
             const index = button.dataset.index;
             const comment = userComments[index];
     
@@ -71,11 +80,28 @@ const renderComments = () => {
             renderComments();
         })
         
-    })
-    
+    });
+
+    const quoteComment = document.getElementById('list');
+
+    const addClickEventToComments = () => {
+        const commentElements = document.querySelectorAll('.comment');
+        commentElements.forEach((commentElement, index) => {
+            commentElement.addEventListener('click', () => {
+                const comment = userComments[index];
+
+                
+                const inputComment = document.getElementById('input-comment');
+                inputComment.value = `[Цитата пользователя: "${comment.text}"]`;
+
+            console.log(`клик по тексту коментария: ${userComments[index].text} `);
+            })
+        })
+    }
+    addClickEventToComments();
 };
 
-renderComments()
+renderComments();
 
 
 buttonInput.addEventListener('click', () => {
@@ -95,6 +121,12 @@ buttonInput.addEventListener('click', () => {
             inputName.placeholder = 'Ваше имя меньше 5 символов';
             inputName.value = '';
             isValidation = false;
+        } else if (inputName.value.length >= 12) {
+
+            inputName.classList.add('error');
+            inputName.placeholder = 'Ваше имя больше 12 символов';
+            inputName.value = '';
+            isValidation = false;
 
         } else {
             
@@ -102,11 +134,10 @@ buttonInput.addEventListener('click', () => {
             
         }
 
-        if (inputComment.value.length <= 10) {
+        if (inputComment.value.length <= 5) {
             inputComment.placeholder = 'Ваш коментарий меньше 15 символов';
             inputComment.classList.add('error');
             inputComment.value = '';
-
             isValidation = false;
 
         } else {
@@ -118,8 +149,6 @@ buttonInput.addEventListener('click', () => {
     }
 
     if(!validateInput()) {
-
-        return;
 
     } else {
        
