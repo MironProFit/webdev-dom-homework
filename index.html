@@ -8,10 +8,10 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
-        <li class="comment">
+      <ul id="list" class="comments">
+        <!-- <li class="comment">
           <div class="comment-header">
-            <div>Глеб Фокин</div>
+            <div class="title">Глеб Фокин</div>
             <div>12.02.22 12:18</div>
           </div>
           <div class="comment-body">
@@ -42,30 +42,29 @@
               <button class="like-button -active-like"></button>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
-      <div class="add-form">
+      <div class="add-form" id="name">
         <input
+          id="input-name"
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
         />
         <textarea
+          id="input-comment"
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button class="add-form-button" id="button">Написать</button>
         </div>
       </div>
     </div>
   </body>
 
-  <script>
-    "use strict";
-    // Код писать здесь
-    console.log("It works!");
+  <script src="./script.js">
   </script>
 </html>

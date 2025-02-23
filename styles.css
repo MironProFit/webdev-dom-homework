@@ -103,8 +103,14 @@ body {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
-    border: none;
+    border: 2px solid #0000;
+
   }
+
+  .error {
+    border: 2px solid red;
+  }
+
 
   .add-form-name {
     width: 300px;
