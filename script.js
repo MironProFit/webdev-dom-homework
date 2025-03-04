@@ -7,17 +7,18 @@ const likeButton = document.querySelector(".like-button");
 
 // Форматирование выводимой даты
 
-const currentDate = new Date();
-const formattedDate = formatDate(currentDate);
+function formatDate(serverTime) {
+  const date = new Date(serverTime);
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
 
-function formatDate(date) {
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = String(date.getFullYear()).slice(-2);
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-
-  return `${day}.${month}.${year} ${hours}:${minutes}`;
+  return date.toLocaleString("ru-RU", options);
 }
 
 // обновление массива с коментариями
@@ -52,10 +53,14 @@ const fetchComments = () => {
     });
 };
 
-fetchComments().then((data) => {
-  updateUserComments(data);
-  renderComments();
-});
+const fetchAndRender = () => {
+  fetchComments().then((data) => {
+    updateUserComments(data);
+    renderComments();
+  });
+};
+
+fetchAndRender();
 
 function escapeHtml(text) {
   const escapeText = text
@@ -76,7 +81,7 @@ const renderComments = () => {
         `<li class="comment">
           <div class="comment-header">
             <div class="title">${escapeHtml(comments.name)}</div>
-            <div>${comments.date}</div>
+            <div>${formatDate(comments.date)}</div>
           </div>
           <div class="comment-body">
             <div class="comment-text">${escapeHtml(comments.text)}</div>
@@ -98,7 +103,7 @@ const renderComments = () => {
   likeButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
-      const index = button.dataset.index;
+      const index = button.dataset.id;
       const comment = userComments[index];
 
       if (comment.isLiked) {
@@ -143,7 +148,7 @@ buttonInput.addEventListener("click", () => {
       inputName.placeholder = "Ваше имя меньше 5 символов";
       inputName.value = "";
       isValidation = false;
-    } else if (inputName.value.length >= 12) {
+    } else if (inputName.value.length >= 30) {
       inputName.classList.add("error");
       inputName.placeholder = "Ваше имя больше 12 символов";
       inputName.value = "";
@@ -165,25 +170,15 @@ buttonInput.addEventListener("click", () => {
   }
 
   if (!validateInput()) {
-  } else {
-    const newComment = {
-      name: escapeHtml(inputName.value),
-      date: formatDate,
-      text: escapeHtml(inputComment.value),
-      likes: 0,
-      isLiked: false,
-    };
+    return;
   }
 
-  postComment(escapeHtml(inputComment.value), escapeHtml(inputName.value)).then(
-    () => {
-      renderComments();
-      inputName.value = "";
-      inputComment.value = "";
-    }
-  );
+  postComment(inputComment.value, inputName.value).then(() => {
+    fetchAndRender();
+    inputName.value = "";
+    inputComment.value = "";
+  });
 });
-
 
 const postComment = (text, name) => {
   return fetch(host + "/comments", {
@@ -192,8 +187,7 @@ const postComment = (text, name) => {
       text,
       name,
     }),
-  }).then(() => {
-    return fetchComments();
+  }).then((response) => {
+    return response.json();
   });
 };
-
