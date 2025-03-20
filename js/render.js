@@ -42,11 +42,16 @@ const addLikeButtonListeners = (userComments) => {
             event.stopPropagation()
             const index = button.dataset.id
             const comment = userComments[index]
+            button.disabled = true
+            button.classList.add('loading')
 
-            comment.isLiked ? comment.likes-- : comment.likes++
-            comment.isLiked = !comment.isLiked
-
-            renderComments(userComments, document.getElementById('list'))
+            setTimeout(function() {
+                comment.isLiked ? comment.likes-- : comment.likes++
+                comment.isLiked = !comment.isLiked
+                renderComments(userComments, document.getElementById('list'))
+                button.disabled = false
+                button.classList.remove('loading')
+            }, 3000)
         })
     })
 }
@@ -61,4 +66,3 @@ const addClickEventToComments = (userComments) => {
         })
     })
 }
-
