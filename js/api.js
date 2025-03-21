@@ -24,6 +24,15 @@ export const postComment = (text, name) => {
             name,
         }),
     }).then((response) => {
+        if (!response.ok) {
+            return response.json().then((errorData) => {
+                alert(errorData.error || 'Ошибка при отправке комментария')
+
+                throw new Error(
+                    errorData.error || 'Ошибка при отправке комментария'
+                )
+            })
+        }
         return response.json()
     })
 }

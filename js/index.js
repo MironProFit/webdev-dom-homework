@@ -53,15 +53,15 @@ buttonInput.addEventListener('click', () => {
         isLiked: false,
     }
 
-    userComments.push(newComments)
-    updateUserComments(userComments)
-
     postComment(inputComment.value, inputName.value)
         .then(() => {
             fetchAndRender()
         })
+        // .catch((error) => {
+        //     const errorMessage = error.error || 'Неизвестная ошибка'
+        //     alert(errorMessage)
+        // })
         .finally(() => {
-
             document.querySelector('.comment-loaded').style.display = 'none'
             document.querySelector('.add-form').style.display = 'flex'
 
