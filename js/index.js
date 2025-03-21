@@ -56,13 +56,15 @@ buttonInput.addEventListener('click', () => {
     postComment(inputComment.value, inputName.value)
         .then(() => {
             fetchAndRender()
+            inputName.value = ''
+            inputComment.value = ''
+
         })
         .finally(() => {
             document.querySelector('.comment-loaded').style.display = 'none'
             document.querySelector('.add-form').style.display = 'flex'
 
-            inputName.value = ''
-            inputComment.value = ''
+            
         })
 })
 
