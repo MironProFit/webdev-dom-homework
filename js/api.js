@@ -27,7 +27,7 @@ export const fetchComments = () => {
 export const postComment = (text, name) => {
     if (!navigator.onLine) {
         alert('Ваш интернет был похищен инопланетянами')
-        return 
+        return Promise.reject(new Error('Нет интернет-соединения '))
     }
     return fetch(host + '/comments', {
         method: 'POST',
@@ -57,9 +57,7 @@ export const postComment = (text, name) => {
         })
         .catch((error) => {
             alert(error.message)
+            throw error
         })
 
-        .finally(
-
-        )
 }
