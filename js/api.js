@@ -1,4 +1,4 @@
-const host = 'https://wedev-api.sky.pro/api/v1/Miron_MPF'
+const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
 
 export const fetchComments = () => {
     if (!navigator.onLine) {
@@ -35,7 +35,7 @@ export const postComment = (text, name, retries = maxRetries) => {
         body: JSON.stringify({
             text,
             name,
-            forceError: true,
+            // forceError: true,
         }),
     })
         .then((response) => {
