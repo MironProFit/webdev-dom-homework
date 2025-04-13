@@ -1,11 +1,8 @@
-const host = "https://wedev-api.sky.pro/api/v1/Miron_MPF"
+const host = 'https://wedev-api.sky.pro/api/v1/Miron_MPF'
 
 export const fetchComments = () => {
-    return fetch(host + "/comments")
+    return fetch(host + '/comments')
         .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok")
-            }
             return response.json()
         })
         .then((responseData) => {
@@ -17,19 +14,25 @@ export const fetchComments = () => {
                 isLiked: false,
             }))
         })
-        .catch((error) => {
-            console.error("Error fetching comments:", error)
-        })
 }
 
 export const postComment = (text, name) => {
-    return fetch(host + "/comments", {
-        method: "POST",
+    return fetch(host + '/comments', {
+        method: 'POST',
         body: JSON.stringify({
             text,
             name,
         }),
     }).then((response) => {
+        if (!response.ok) {
+            return response.json().then((errorData) => {
+                alert(errorData.error || 'Ошибка при отправке комментария')
+
+                throw new Error(
+                    errorData.error || 'Ошибка при отправке комментария'
+                )
+            })
+        }
         return response.json()
     })
 }
