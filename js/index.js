@@ -30,7 +30,7 @@ const wrapLoadingText = () => {
 }
 
 const fetchAndRender = () => {
-    fetchComments().then((data) => {
+    return fetchComments().then((data) => {
         updateUserComments(data)
         loadingMassage.forEach((element) => {
             element.style.display = 'none'
@@ -56,15 +56,14 @@ buttonInput.addEventListener('click', () => {
     postComment(inputComment.value, inputName.value)
         .then(() => {
             fetchAndRender()
+        })
+        .then(() => {
             inputName.value = ''
             inputComment.value = ''
-
         })
         .finally(() => {
             document.querySelector('.comment-loaded').style.display = 'none'
             document.querySelector('.add-form').style.display = 'flex'
-
-            
         })
 })
 
