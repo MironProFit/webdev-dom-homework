@@ -1,3 +1,5 @@
+import { updateUserData } from './userdata.js'
+
 export const clearUserData = () => {
     const buttonClear = document.getElementById('clear-data')
     buttonClear.addEventListener('click', () => {
@@ -17,10 +19,9 @@ export const clearUserData = () => {
             login: '',
         }
         updateUserData(newData)
+        console.log('данные авторизации очищены');
+        
         location.reload()
         window.scrollTo(0, 0)
     })
-    // closeWindowInputComment()
 }
-
-clearUserData()

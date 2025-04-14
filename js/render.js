@@ -1,8 +1,9 @@
 import { escapeHtml } from './escapehtml.js'
 import { formatDate } from './formatdate.js'
-import { addLikeButtonListeners, hiddenButtonDelete } from './managebtn.js'
+import { container, userComments } from './index.js'
 
 export const renderComments = (userComments, container) => {
+    console.log(userComments, container)
     container.innerHTML = userComments
         .map(
             (comment, id) => `<li class="comment">
@@ -25,12 +26,11 @@ export const renderComments = (userComments, container) => {
         )
         .join('')
 
-    addLikeButtonListeners(userComments)
-    addClickEventToComments(userComments)
-    const commentContainer = document.querySelector('.comment-footer')
+        addLikeButtonListeners(userComments)
+        addClickEventToComments(userComments)
+    // const commentContainer = document.querySelector('.comment-footer')
 
-    console.log(commentContainer)
-    hiddenButtonDelete()
+    // hiddenButtonDelete()
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -43,3 +43,26 @@ export const addClickEventToComments = (userComments) => {
         })
     })
 }
+
+export const addLikeButtonListeners = (userComments) => {
+    const likeButtons = document.querySelectorAll('.like-button')
+
+    likeButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation()
+            const index = button.dataset.id
+            const comment = userComments[index]
+
+            if (comment.isLiked) {
+                comment.likes--
+            } else {
+                comment.likes++
+            }
+            comment.isLiked = !comment.isLiked
+
+            renderComments()
+          })
+    })
+}
+
+

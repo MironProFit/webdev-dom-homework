@@ -1,6 +1,7 @@
 import { userData, updateUserData } from './userdata.js'
 
-import {hostAuth, host} from './variables.js';
+const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
+const hostAuth = 'https://wedev-api.sky.pro/api/user'
 
 const maxRetries = 3
 
@@ -29,6 +30,8 @@ export const fetchComments = () => {
 }
 
 export const authorization = (login, password) => {
+    console.log('запуск')
+
     return fetch(hostAuth + '/login', {
         method: 'POST',
         body: JSON.stringify({
@@ -49,7 +52,9 @@ export const authorization = (login, password) => {
                 login: responseData.user.login,
             }
             updateUserData(newData)
+            console.log('данные обновлены')
         })
+        .catch((error) => console.log(error.massage))
 }
 
 export const registration = (login, name, password) => {
@@ -116,20 +121,20 @@ export const postComment = (text, retries = maxRetries) => {
             return response.json()
         })
         .catch((error) => {
-            alert(error.message)
+            alert(error.massage)
             throw error
         })
 }
 
-export const deliteComment = (commentId) => {
-    return fetch(hostAuth + `/comments/${commentId}`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
-        method: 'DELETE',
-    })
-    .then((response) => {
-        return response.json()
-    }).then((responseData) => {
-        console.log(responseData);
-        return responseData
-    })
-}
+// export const deliteComment = (commentId) => {
+//     return fetch(hostAuth + `/comments/${commentId}`, {
+//         headers: { Authorization: `Bearer ${userData.token}` },
+//         method: 'DELETE',
+//     })
+//     .then((response) => {
+//         return response.json()
+//     }).then((responseData) => {
+//         console.log(responseData);
+//         return responseData
+//     })
+// }

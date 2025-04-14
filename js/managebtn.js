@@ -1,4 +1,4 @@
-import  {inputName, inputComment, buttonInput, container, loadingMassage, }  from './variables.js'
+import  {inputName, inputComment, buttonInput, container, loadingMassage, userComments}  from './variables.js'
 import { userData, updateUserData } from './userdata.js'
 import {renderComments} from './render.js';
 

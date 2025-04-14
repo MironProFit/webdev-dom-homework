@@ -1,4 +1,3 @@
-import {inputComment} from './variables.js';
 
 export const validateInput = (inputComment) => {
     let isValidation = true

@@ -1,7 +1,11 @@
+import { authorization } from './api.js'
+
 export const renderAuthorizationForm = () => {
+    console.log('запущен renderAuthorizationForm');
     const authorButtonsContainer = document.getElementById('authorization')
     let formRendered = false
     const authBtutton = document.querySelector('.auth__btn')
+
     authBtutton.addEventListener('click', (event) => {
         event.stopPropagation()
         const btnAuthContainer = document.querySelectorAll('.btn--close')
@@ -39,12 +43,9 @@ export const renderAuthorizationForm = () => {
                 login: inputLogin.value,
                 password: inputPass.value,
             }
-            authorization(dataAuth.login, dataAuth.password).then(() => {
-                console.log(userData)
-                closeWindowInputComment()
-            })
+            console.log(dataAuth)
+            authorization(dataAuth.login, dataAuth.password)
         })
     })
 }
 
-renderAuthorizationForm()
