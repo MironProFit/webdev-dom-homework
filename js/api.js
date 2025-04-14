@@ -1,4 +1,5 @@
 import { userData, updateUserData } from './userdata.js'
+import {fetchAndRender} from './index.js';
 
 const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
 const hostAuth = 'https://wedev-api.sky.pro/api/user'
@@ -53,6 +54,7 @@ export const authorization = (login, password) => {
             }
             updateUserData(newData)
             console.log('данные обновлены')
+            fetchAndRender()
         })
         .catch((error) => console.log(error.massage))
 }

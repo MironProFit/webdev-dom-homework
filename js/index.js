@@ -3,6 +3,7 @@ import { renderComments } from './render.js'
 import { clearUserData } from './clearusedate.js'
 import { renderAuthorizationForm } from './renderauth.js'
 import { renderRegistrationForm } from './renderreg.js'
+import { quoteComment, hiddenElement } from './managebtn.js'
 
 export const inputComment = document.getElementById('input-comment')
 export const inputName = document.getElementById('input-name')
@@ -31,17 +32,23 @@ const updateUserComments = (newComments) => {
     renderComments(userComments, container)
 }
 
-const fetchAndRender = () => {
-    return fetchComments().then((data) => {
-        updateUserComments(data)
-        loadingMassage.forEach((element) => {
-            element.style.display = 'none'
+export const fetchAndRender = () => {
+    return fetchComments()
+        .then((data) => {
+            updateUserComments(data)
+            loadingMassage.forEach((element) => {
+                element.style.display = 'none'
+            })
         })
-    })
+        .then(() => {
+            hiddenElement()
+        })
 }
 clearUserData()
 renderAuthorizationForm()
 renderRegistrationForm()
+quoteComment()
+// hiddenElement()
 
 window.onload = () => {
     wrapLoadingText()

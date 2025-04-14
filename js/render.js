@@ -1,6 +1,7 @@
 import { escapeHtml } from './escapehtml.js'
 import { formatDate } from './formatdate.js'
 import { container, userComments } from './index.js'
+import { hiddenElement } from './managebtn.js'
 
 export const renderComments = (userComments, container) => {
     console.log(userComments, container)
@@ -15,7 +16,7 @@ export const renderComments = (userComments, container) => {
           <div class="comment-text">${escapeHtml(comment.text)}</div>
         </div>
         <div class="comment-footer">
-            <div class="del-comment button btn--close" data-id="${id}">Удалить</div>
+            <div class="container-del"></div>
 
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
@@ -26,8 +27,9 @@ export const renderComments = (userComments, container) => {
         )
         .join('')
 
-        addLikeButtonListeners(userComments)
-        addClickEventToComments(userComments)
+    addLikeButtonListeners(userComments)
+    addClickEventToComments(userComments)
+
     // const commentContainer = document.querySelector('.comment-footer')
 
     // hiddenButtonDelete()
@@ -45,24 +47,22 @@ export const addClickEventToComments = (userComments) => {
 }
 
 export const addLikeButtonListeners = (userComments) => {
-  const likeButtons = document.querySelectorAll('.like-button')
-  likeButtons.forEach((button) => {
-      button.addEventListener('click', (event) => {
-          event.stopPropagation()
-          const index = button.dataset.id
-          const comment = userComments[index]
-          button.disabled = true
-          button.classList.add('loading')
+    const likeButtons = document.querySelectorAll('.like-button')
+    likeButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation()
+            const index = button.dataset.id
+            const comment = userComments[index]
+            button.disabled = true
+            button.classList.add('loading')
 
-          setTimeout(function() {
-              comment.isLiked ? comment.likes-- : comment.likes++
-              comment.isLiked = !comment.isLiked
-              renderComments(userComments, document.getElementById('list'))
-              button.disabled = false
-              button.classList.remove('loading')
-          }, 3000)
-      })
-  })
+            setTimeout(function () {
+                comment.isLiked ? comment.likes-- : comment.likes++
+                comment.isLiked = !comment.isLiked
+                renderComments(userComments, document.getElementById('list'))
+                button.disabled = false
+                button.classList.remove('loading')
+            }, 3000)
+        })
+    })
 }
-
-

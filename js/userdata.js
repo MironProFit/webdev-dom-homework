@@ -2,7 +2,8 @@ export const userData = {
     token: localStorage.getItem('token') || '',
     id: localStorage.getItem('id') || '',
     name: localStorage.getItem('name') || '',
-    login: localStorage.getItem('login') || ''
+    login: localStorage.getItem('login') || '',
+    password: localStorage.getItem('password') || ''
 }
 
 console.log(userData);
@@ -13,6 +14,7 @@ export const updateUserData = (newData) => {
     localStorage.setItem('id', userData.id)
     localStorage.setItem('name', userData.name)
     localStorage.setItem('login', userData.login)
+    localStorage.setItem('password', userData.password)
 }
 
 console.log(userData);
