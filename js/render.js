@@ -1,7 +1,6 @@
 import { escapeHtml } from './escapehtml.js'
 import { formatDate } from './formatdate.js'
-import {addLikeButtonListeners, hiddenButtonDelete,} from './managebtn.js';
-
+import { addLikeButtonListeners, hiddenButtonDelete } from './managebtn.js'
 
 export const renderComments = (userComments, container) => {
     container.innerHTML = userComments

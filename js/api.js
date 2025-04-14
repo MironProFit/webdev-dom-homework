@@ -1,7 +1,6 @@
 import { userData, updateUserData } from './userdata.js'
 
-const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
-const hostAuth = 'https://wedev-api.sky.pro/api/user'
+import {hostAuth, host} from './variables.js';
 
 const maxRetries = 3
 
@@ -25,7 +24,7 @@ export const fetchComments = () => {
             }))
         })
         .catch((error) => {
-            alert(error.massege)
+            alert(error.messege)
         })
 }
 

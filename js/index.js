@@ -1,10 +1,12 @@
 import { fetchComments, postComment } from './api.js'
 import { renderComments } from './render.js'
 import { wrapLoadingText } from './textloading.js'
-import { container, userComments, loadingMassage } from './variables.js'
+import { container, loadingMassage } from './variables.js'
+
+export let userComments = []
 
 const updateUserComments = (newComments) => {
-    userComments.push(newComments)
+    userComments = newComments
     renderComments(userComments, container)
 }
 
