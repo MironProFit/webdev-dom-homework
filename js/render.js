@@ -45,24 +45,24 @@ export const addClickEventToComments = (userComments) => {
 }
 
 export const addLikeButtonListeners = (userComments) => {
-    const likeButtons = document.querySelectorAll('.like-button')
+  const likeButtons = document.querySelectorAll('.like-button')
+  likeButtons.forEach((button) => {
+      button.addEventListener('click', (event) => {
+          event.stopPropagation()
+          const index = button.dataset.id
+          const comment = userComments[index]
+          button.disabled = true
+          button.classList.add('loading')
 
-    likeButtons.forEach((button) => {
-        button.addEventListener('click', (event) => {
-            event.stopPropagation()
-            const index = button.dataset.id
-            const comment = userComments[index]
-
-            if (comment.isLiked) {
-                comment.likes--
-            } else {
-                comment.likes++
-            }
-            comment.isLiked = !comment.isLiked
-
-            renderComments()
-          })
-    })
+          setTimeout(function() {
+              comment.isLiked ? comment.likes-- : comment.likes++
+              comment.isLiked = !comment.isLiked
+              renderComments(userComments, document.getElementById('list'))
+              button.disabled = false
+              button.classList.remove('loading')
+          }, 3000)
+      })
+  })
 }
 
 

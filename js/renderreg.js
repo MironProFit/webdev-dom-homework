@@ -1,3 +1,4 @@
+import {registration} from './api.js';
 
 export const renderRegistrationForm = () => {
     const authorButtonsContainer = document.getElementById('authorization')
@@ -49,9 +50,9 @@ export const renderRegistrationForm = () => {
                 password: inputPass.value,
             }
             registration(dataAuth.login, dataAuth.name, dataAuth.password)
-                .then((data) => {
-                    console.log(data)
-                })
+                // .then((data) => {
+                //     console.log(data)
+                // })
                 .catch((error) => console.error(error))
         })
     })
