@@ -1,5 +1,6 @@
-const loadingOverlay = document.getElementById('loading')
-const loader = document.querySelector('.loader')
+export const loadingOverlay = document.getElementById('loading')
+export const loader = document.querySelector('.loader')
+
 if (!loadingOverlay) {
     console.error('Элемент Loading не найден')
 }
@@ -19,3 +20,5 @@ export const hideLoading = (loadingInterval) => {
     loader.textContent = 'Загрузка'
     loadingOverlay.style.display = 'none'
 }
+
+

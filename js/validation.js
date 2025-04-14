@@ -1,15 +1,8 @@
-export const validateInput = (inputName, inputComment) => {
+import {inputComment} from './variables.js';
+
+export const validateInput = (inputComment) => {
     let isValidation = true
-
-    if (inputName.value === '') {
-        inputName.classList.add('error')
-        inputName.placeholder = 'Не может быть пустым'
-        isValidation = false
-    } else {
-        inputName.classList.remove('error')
-    }
-
-    if ((inputComment.value === '')) {
+    if (inputComment.value === '') {
         inputComment.placeholder = 'Не может быть пустым'
         inputComment.classList.add('error')
         isValidation = false

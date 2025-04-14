@@ -1,4 +1,9 @@
+import { userData, updateUserData } from './userdata.js'
+
 const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
+const hostAuth = 'https://wedev-api.sky.pro/api/user'
+
+const maxRetries = 3
 
 export const fetchComments = () => {
     if (!navigator.onLine) {
@@ -23,18 +28,72 @@ export const fetchComments = () => {
             alert(error.massege)
         })
 }
-const maxRetries = 3
 
-export const postComment = (text, name, retries = maxRetries) => {
+export const authorization = (login, password) => {
+    return fetch(hostAuth + '/login', {
+        method: 'POST',
+        body: JSON.stringify({
+            login: login,
+            password: password,
+        }),
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((responseData) => {
+            console.log('возвращает сервер', responseData)
+
+            const newData = {
+                id: responseData.user._id,
+                token: responseData.user.token,
+                name: responseData.user.name,
+                login: responseData.user.login,
+            }
+            updateUserData(newData)
+        })
+}
+
+export const registration = (login, name, password) => {
+    console.log(login, name, password)
+
+    return fetch('https://wedev-api.sky.pro/api/user', {
+        method: 'POST',
+        body: JSON.stringify({
+            login: login,
+            name: name,
+            password: password,
+        }),
+    })
+        .then((response) => {
+            console.log(response)
+            return response.json()
+        })
+        .then((responseData) => {
+            const newData = {
+                id: responseData.user._id,
+                token: responseData.user.token,
+                name: responseData.user.name,
+                login: responseData.user.login,
+            }
+            updateUserData(newData)
+
+            return responseData, console.log(responseData)
+        })
+}
+
+export const postComment = (text, retries = maxRetries) => {
     if (!navigator.onLine) {
         alert('Ваш интернет был похищен инопланетянами')
         return Promise.reject(new Error('Нет интернет-соединения '))
     }
+
     return fetch(host + '/comments', {
+        headers: {
+            Authorization: `Bearer ${userData.token}`,
+        },
         method: 'POST',
         body: JSON.stringify({
             text,
-            name,
             // forceError: true,
         }),
     })
@@ -61,4 +120,17 @@ export const postComment = (text, name, retries = maxRetries) => {
             alert(error.message)
             throw error
         })
+}
+
+export const deliteComment = (commentId) => {
+    return fetch(hostAuth + `/comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${userData.token}` },
+        method: 'DELETE',
+    })
+    .then((response) => {
+        return response.json()
+    }).then((responseData) => {
+        console.log(responseData);
+        return responseData
+    })
 }
