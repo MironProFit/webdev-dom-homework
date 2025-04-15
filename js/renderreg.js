@@ -1,9 +1,11 @@
-import {registration} from './api.js';
+import { registration } from './api.js'
 
 export const renderRegistrationForm = () => {
     const authorButtonsContainer = document.getElementById('authorization')
 
     let formRendered = false
+    // authorButtonsContainer.innerHTML = `<div class="auth__btn button btn--close" >Вход 2</div>
+    //     <div class="reg__btn button btn--close" >Регистрация 2</div>`
     const regButton = document.querySelector('.reg__btn')
     regButton.addEventListener('click', (event) => {
         event.stopPropagation()
@@ -29,9 +31,10 @@ export const renderRegistrationForm = () => {
           type="text"
           class="add-form-pass input-form"
           placeholder="Введите ваш пароль"
-        >
-        <button class="button-input button">Регистрация</button>
+          >
+          <button class="button-input button">Регистрация</button>
         `
+
             const loginInput = document.getElementById('login')
             if (loginInput) {
                 loginInput.focus()

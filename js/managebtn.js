@@ -2,6 +2,8 @@ import { userData, updateUserData } from './userdata.js'
 import { renderComments } from './render.js'
 import { buttonInput } from './index.js'
 import { validateInput } from './validation.js'
+import { clearUserData } from './clearusedate.js'
+import { inputComment } from './index.js'
 
 export const quoteComment = () => {
     buttonInput.addEventListener('click', () => {
@@ -28,27 +30,59 @@ export const quoteComment = () => {
 }
 
 export const hiddenElement = () => {
-    console.log('Корректировка пользовательского интерфейса')
-    const deleteBtn = document.querySelector('.del-comment') //кнопка удаления комента
-    const authBtn = document.querySelector('.auth__btn') // кнопка авторизации
-    const regBtn = document.querySelector('.reg__btn') // кнопка авторизации
-    const exitBtn = document.querySelector('.exit__btn')
-    const authBlock = document.querySelector('.auth') // блок авторизации
-    const commentBlock = document.querySelector('.window-input') // окно ввода комментария
+    const deleteBtn = document.querySelectorAll('.del-comment') //кнопка удаления комента
+    const authBtn = document.querySelectorAll('.auth__btn') // кнопка авторизации
+    const regBtn = document.querySelectorAll('.reg__btn') // кнопка регистрации
+    const exitBtn = document.querySelectorAll('.exit__btn')
+    const authBlock = document.getElementById('authorization') // блок авторизации
+    const commentBlock = document.querySelectorAll('.window-input') // окно ввода комментария
+    const delBtnBlock = document.querySelectorAll('.container-del')
+    const delBtn = document.querySelectorAll('.del-comment')
 
     if (!userData.token && !userData.login && !userData.password) {
-        commentBlock.style.display = 'none'
+        console.log('Пользован не авторизован')
+
+        commentBlock.forEach((item) => {
+            item.style.display = 'none'
+        })
+        authBtn.forEach((item) => {
+            item.style.display = 'flex'
+        })
+        regBtn.forEach((item) => {
+            item.style.display = 'flex'
+        })
+        exitBtn.forEach((item) => {
+            item.style.display = 'none'
+        })
 
         // <div class="del-comment button btn--close" data-id="${id}">Удалить</div>
     } else {
-        commentBlock.style.display = 'flex'
-        deleteBtn.style.display = 'flex'
-        exitBtn.style.display = 'flex'
+        console.log('Пользован авторизован')
+
+        commentBlock.forEach((item) => {
+            item.style.display = 'flex'
+        })
+        authBtn.forEach((item) => {
+            item.style.display = 'none'
+        })
+        regBtn.forEach((item) => {
+            item.style.display = 'none'
+        })
+        // authBlock.forEach((item) => {
+
+        //     console.log("перерисовка блока аунтификации");
+        //     exitBtn.style.display = 'flex'
+        //     item.innerHTML = '<div class="exit__btn button btn--close">Выход</div>'
+        // })
+        delBtnBlock.forEach((item) => {
+            item.innerHTML = '<div class="del-comment button btn--close" data-id="${id}">Удалить</div>'
+        })
     }
-    if (userData.token && userData.login && userData.password) {
-        
-        authBlock.innerHTML = `<button class="exit__btn button btn--close">Выйти</button>`
-    }
+}
+
+{
+    /* <button class="auth__btn button btn--close">Вход</button>
+        <button class="reg__btn button btn--close">Регистрация</button> */
 }
 
 // export const closeWindowInputComment = () => {
@@ -107,4 +141,22 @@ export const addLikeButtonListeners = (userComments) => {
             }, 3000)
         })
     })
+}
+
+export const deleteCommentEvent = () => {
+    console.log('функция удаления комента запущена')
+    const delBtn = document.querySelectorAll('.del-comment')
+    const comments = document.querySelectorAll('.comment')
+    console.log(`кнопки удаления найдено ${delBtn.length}`);
+    if (delBtn.length > 0) {
+        delBtn.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                console.log(`${index}`)
+            })
+        })
+    }
+
+    // delBtn.forEach(() => {
+
+    // })
 }

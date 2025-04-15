@@ -1,7 +1,8 @@
 import { escapeHtml } from './escapehtml.js'
 import { formatDate } from './formatdate.js'
-import { container, userComments } from './index.js'
-import { hiddenElement } from './managebtn.js'
+import { deleteCommentEvent } from './managebtn.js'
+import { fetchAndRender } from './index.js'
+import { clearUserData } from './clearusedate.js'
 
 export const renderComments = (userComments, container) => {
     console.log(userComments, container)
@@ -65,4 +66,18 @@ export const addLikeButtonListeners = (userComments) => {
             }, 3000)
         })
     })
+}
+
+export const renderBlockAuth = () => {
+    const authorButtonsContainer = document.getElementById('authorization')
+
+    authorButtonsContainer.innerHTML = `<div class="exit__btn button btn--close">Выход</div>`
+    const exitBtn = document.querySelector('.exit__btn')
+    exitBtn.style.display = 'flex'
+    // window.onload()
+    fetchAndRender()
+    clearUserData()
+    deleteCommentEvent()
+
+    console.log('рендер блока авторизации выполнен')
 }
