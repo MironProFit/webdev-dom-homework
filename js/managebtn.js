@@ -29,25 +29,6 @@ export const quoteComment = () => {
     })
 }
 
-export const addLikeButtonListeners = (userComments) => {
-    const likeButtons = document.querySelectorAll('.like-button')
-    likeButtons.forEach((button) => {
-        button.addEventListener('click', (event) => {
-            event.stopPropagation()
-            const index = userComments[index].id
-            const comment = userComments[index]
-            console.log(index, comment)
-            button.disabled = true
-            button.classList.add('loading')
-            comment.isLiked ? comment.likes-- : comment.likes++
-            comment.isLiked = !comment.isLiked
-            renderComments(userComments, document.getElementById('list'))
-            button.disabled = false
-            button.classList.remove('loading')
-        })
-    })
-}
-
 export const deleteCommentEvent = () => {
     console.log('Удаление комента активирована')
     const delBtn = document.querySelectorAll('.del-comment')

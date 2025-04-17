@@ -34,13 +34,12 @@ const updateUserComments = (newComments) => {
 }
 
 export const fetchAndRender = () => {
-    renderBlockAuth
+    // renderBlockAuth
     return fetchComments().then((data) => {
         updateUserComments(data)
         loadingMassage.forEach((element) => {
             element.style.display = 'none'
         })
-        // hiddenElement()
     })
 }
 clearUserData()

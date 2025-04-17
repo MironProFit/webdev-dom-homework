@@ -18,6 +18,7 @@ export const fetchComments = () => {
             return response.json()
         })
         .then((responseData) => {
+
             return responseData.comments.map((comment) => ({
                 name: comment.author.name,
                 id: comment.id,
@@ -112,6 +113,7 @@ export const postComment = (text, retries = maxRetries) => {
     })
         .then((response) => {
             if (!response.ok) {
+                
                 if (response.status === 500 && retries > 0) {
                     alert(`Ошибка 500. Повторная отправка комментария... Осталось попыток: ${retries}`)
                     return postComment(text, name, retries - 1)
@@ -164,7 +166,7 @@ export const switchLike = (likeId) => {
             return response.json()
         })
         .then((responseData) => {
-            return responseData
+            return responseData.result
         })
         .catch((error) => {
             console.log(error.message)
