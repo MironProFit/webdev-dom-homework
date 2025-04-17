@@ -1,7 +1,9 @@
 import { authorization } from './api.js'
+import {renderBlockAuth} from './render.js';
+
 
 export const renderAuthorizationForm = () => {
-    console.log('запущен renderAuthorizationForm')
+    console.log('Активирована функция аторизвции')
     const authorButtonsContainer = document.getElementById('authorization')
     let formRendered = false
 
@@ -9,14 +11,14 @@ export const renderAuthorizationForm = () => {
     // <div class="reg__btn button btn--close" >Регистрация 3</div>`
     const authButton = document.querySelector('.auth__btn')
     if (authButton) {
-        console.log('кнопка найдена');
+        console.log('Кнопка авторизации найдена')
     } else {
-        console.log('кнопка не найдена');
-
+        console.log('Кнопка авторизации не найдена')
+        return
     }
 
     authButton.addEventListener('click', (event) => {
-        console.log('кнопка входа нажата');
+        console.log('кнопка входа нажата')
         event.stopPropagation()
         const btnAuthContainer = document.querySelectorAll('.btn--close')
         btnAuthContainer.forEach((button) => {
@@ -55,8 +57,9 @@ export const renderAuthorizationForm = () => {
             }
 
             console.log(dataAuth)
-            authorization(dataAuth.login, dataAuth.password)
+            authorization(dataAuth.login, dataAuth.password).then(() => {
+                renderBlockAuth()
+            })
         })
     })
 }
-

@@ -4,7 +4,6 @@ export const clearUserData = () => {
     const buttonClear = document.querySelectorAll('.exit__btn')
     buttonClear.forEach((item) => {
         if (buttonClear) {
-            console.log(buttonClear);
             item.addEventListener('click', () => {
                 const btns = document.querySelectorAll('.button')
                 btns.forEach((btn) => {

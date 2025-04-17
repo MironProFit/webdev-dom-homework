@@ -1,5 +1,5 @@
 import { userData, updateUserData } from './userdata.js'
-import { fetchAndRender } from './index.js'
+import { fetchAndRender, userComments } from './index.js'
 import { renderBlockAuth } from './render.js'
 
 const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
@@ -20,6 +20,7 @@ export const fetchComments = () => {
         .then((responseData) => {
             return responseData.comments.map((comment) => ({
                 name: comment.author.name,
+                id: comment.id,
                 date: comment.date,
                 text: comment.text,
                 likes: comment.likes,
@@ -59,7 +60,7 @@ export const authorization = (login, password) => {
             console.log('перерисовываем блок авторизации')
 
             fetchAndRender().then(() => {
-                console.log('рендер выполнен');
+                console.log('рендер выполнен')
             })
         })
         .catch((error) => console.log(error.massage))
@@ -89,7 +90,7 @@ export const registration = (login, name, password) => {
             }
             updateUserData(newData)
 
-            return responseData, console.log(responseData)
+            return responseData, console.log(responseData), renderBlockAuth(), fetchAndRender()
         })
 }
 
@@ -135,14 +136,37 @@ export const postComment = (text, retries = maxRetries) => {
 }
 
 export const deleteFetch = (commentId) => {
-    return fetch(hostAuth + `/comments/${commentId}`, {
+    return fetch(host + `/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${userData.token}` },
         method: 'DELETE',
     })
-    .then((response) => {
-        return response.json()
-    }).then((responseData) => {
-        console.log(responseData);
-        return responseData
+        .then((response) => {
+            return response.json()
+        })
+        .then((responseData) => {
+            console.log(responseData)
+            fetchAndRender()
+            return responseData
+        })
+}
+
+export const switchLike = (likeId) => {
+    console.log(`/comments/${likeId}/toggle-like`)
+    console.log(likeId)
+    return fetch(host + `/comments/${likeId}/toggle-like`, {
+        headers: { Authorization: `Bearer ${userData.token}` },
+        method: 'POST',
     })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Что-то пошло не так')
+            }
+            return response.json()
+        })
+        .then((responseData) => {
+            return responseData
+        })
+        .catch((error) => {
+            console.log(error.message)
+        })
 }

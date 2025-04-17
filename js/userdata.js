@@ -6,7 +6,6 @@ export const userData = {
     password: localStorage.getItem('password') || ''
 }
 
-console.log(userData);
 
 export const updateUserData = (newData) => {
     Object.assign(userData, newData)
