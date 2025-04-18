@@ -1,18 +1,12 @@
-// const listElement = document.getElementById("list");
 const inputName = document.getElementById('input-name')
 const inputComment = document.getElementById('input-comment')
 const buttonInput = document.getElementById('button')
-// const errorClass = document.querySelector(".error");
-
-// обновление массива с коментариями
 
 let userComments = []
 
 const updateUserComments = (newComments) => {
     userComments = newComments
 }
-
-// API запрос на получение данных с сервера
 
 const host = 'https://wedev-api.sky.pro/api/v1/Miron_MPF'
 
@@ -46,12 +40,7 @@ const fetchAndRender = () => {
 fetchAndRender()
 
 function escapeHtml(text) {
-    const escapeText = text
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;')
+    const escapeText = text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
     return escapeText
 }
 
@@ -72,9 +61,7 @@ const renderComments = () => {
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">${comments.likes}</span>
-              <button class="like-button ${
-                  comments.isLiked ? '-active-like' : ''
-              }" data-id ="${id}"></button>
+              <button class="like-button ${comments.isLiked ? '-active-like' : ''}" data-id ="${id}"></button>
             </div>
           </div>
         </li>`
@@ -109,9 +96,7 @@ const renderComments = () => {
                 const inputComment = document.getElementById('input-comment')
                 inputComment.value = `[Цитата пользователя: "${comment.text}"]`
 
-                console.log(
-                    `клик по тексту коментария: ${userComments[index].text} `
-                )
+                console.log(`клик по тексту коментария: ${userComments[index].text} `)
             })
         })
     }

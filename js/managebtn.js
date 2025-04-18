@@ -1,5 +1,3 @@
-import { userData, updateUserData } from './userdata.js'
-import { renderComments, renderBlockAuth } from './render.js'
 import { buttonInput, userComments } from './index.js'
 import { validateInput } from './validation.js'
 import { inputComment, fetchAndRender } from './index.js'

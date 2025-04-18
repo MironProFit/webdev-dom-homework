@@ -1,14 +1,11 @@
 import { authorization } from './api.js'
-import {renderBlockAuth} from './render.js';
-
+import { renderBlockAuth } from './render.js'
 
 export const renderAuthorizationForm = () => {
     console.log('Активирована функция аторизвции')
     const authorButtonsContainer = document.getElementById('authorization')
     let formRendered = false
 
-    // authorButtonsContainer.innerHTML = `<div class="auth__btn button btn--close" >Вход 3</div>
-    // <div class="reg__btn button btn--close" >Регистрация 3</div>`
     const authButton = document.querySelector('.auth__btn')
     if (authButton) {
         console.log('Кнопка авторизации найдена')

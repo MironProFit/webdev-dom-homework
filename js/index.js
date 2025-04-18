@@ -30,11 +30,9 @@ const wrapLoadingText = () => {
 const updateUserComments = (newComments) => {
     userComments = newComments
     renderComments(userComments, container)
-    // hiddenElement()
 }
 
 export const fetchAndRender = () => {
-    // renderBlockAuth
     return fetchComments().then((data) => {
         updateUserComments(data)
         loadingMassage.forEach((element) => {

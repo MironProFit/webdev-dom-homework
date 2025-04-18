@@ -2,8 +2,7 @@ import { escapeHtml } from './escapehtml.js'
 import { formatDate } from './formatdate.js'
 import { deleteCommentEvent } from './managebtn.js'
 import { clearUserData } from './clearusedate.js'
-import { fetchComments, switchLike } from './api.js'
-import { fetchAndRender, userComments } from './index.js'
+import { switchLike } from './api.js'
 import { renderAuthorizationForm } from './renderauth.js'
 import { renderRegistrationForm } from './renderreg.js'
 import { userData } from './userdata.js'
@@ -25,10 +24,7 @@ export const renderComments = (userComments, container) => {
 
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
-            <button class="like-button ${
-                comment.isLiked
-                //  ? '-active-like' : ''
-            }
+            <button class="like-button ${comment.isLiked}
                  " data-id="${comment.id}"></button>
           </div>
         </div>
@@ -43,10 +39,6 @@ export const renderComments = (userComments, container) => {
     deleteCommentEvent()
     renderAuthorizationForm()
     renderRegistrationForm()
-
-    // const commentContainer = document.querySelector('.comment-footer')
-
-    // hiddenButtonDelete()
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -65,9 +57,16 @@ export const addLikeButtonListeners = (userComments) => {
     const likeCounter = document.querySelectorAll('.likes-counter')
     likeButtons.forEach((button, index) => {
         button.addEventListener('click', (event) => {
+            if (!userData.token) {
+                // button.classList.remove('loading')
+                alert('Недоступно без авторизации')
+                return
+            }
+
             button.classList.add('loading')
             event.stopPropagation()
             const comment = userComments[index]
+
             switchLike(comment.id)
                 .then((data) => {
                     console.log(data)
@@ -78,10 +77,7 @@ export const addLikeButtonListeners = (userComments) => {
                     console.log(like)
 
                     console.log(userComments.likes)
-                    if (!userData.token) {
-                        alert('Недоступно без авторизации')
-                        return
-                    }
+
                     comment.likes = like.likes
                     comment.isLiked = like.isLiked
 
@@ -95,6 +91,17 @@ export const addLikeButtonListeners = (userComments) => {
                     likeCounter[index].textContent = `${comment.likes}`
                     console.log(comment.isLiked)
                     console.log(comment.likes)
+                    button.classList.remove('loading')
+                })
+                .catch((error) => {
+                    console.error('ошибка обновления лайка', error)
+                    alert('Не удалось обновить статус лайка. Попробуйте позжу')
+                    
+
+                    button.classList.remove('loading')
+                })
+                .finally(() => {
+                    
                     button.classList.remove('loading')
                 })
         })
@@ -122,11 +129,7 @@ export const renderBlockAuth = () => {
         <div class="reg__btn button btn--close" >Регистрация</div>`
     }
 
-    // window.onload()
-    // fetchAndRender()
-
     console.log('Блок авторизации отрисован')
-    // debugger
 }
 
 export const renderLike = (like) => {

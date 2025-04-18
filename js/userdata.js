@@ -3,9 +3,8 @@ export const userData = {
     id: localStorage.getItem('id') || '',
     name: localStorage.getItem('name') || '',
     login: localStorage.getItem('login') || '',
-    password: localStorage.getItem('password') || ''
+    password: localStorage.getItem('password') || '',
 }
-
 
 export const updateUserData = (newData) => {
     Object.assign(userData, newData)
@@ -16,6 +15,4 @@ export const updateUserData = (newData) => {
     localStorage.setItem('password', userData.password)
 }
 
-console.log(userData);
-
-
+console.log(userData)

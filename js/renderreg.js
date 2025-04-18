@@ -1,5 +1,4 @@
 import { registration } from './api.js'
-import { renderBlockAuth } from './render.js'
 
 export const renderRegistrationForm = () => {
     const authorButtonsContainer = document.getElementById('authorization')

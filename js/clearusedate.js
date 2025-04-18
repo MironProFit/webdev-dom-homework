@@ -9,10 +9,6 @@ export const clearUserData = () => {
                 btns.forEach((btn) => {
                     btn.style.display = 'flex'
                 })
-                // const authorButtonsContainer = document.getElementById('authorization')
-                // authorButtonsContainer.style.display = 'flex'
-                // authorButtonsContainer.innerHTML = `<button class="auth__btn button btn--close">Вход</button>
-                // <button class="reg__btn button btn--close">Регистрация</button>`
 
                 const newData = {
                     id: '',

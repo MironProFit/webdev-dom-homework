@@ -1,5 +1,5 @@
 import { userData, updateUserData } from './userdata.js'
-import { fetchAndRender, userComments } from './index.js'
+import { fetchAndRender } from './index.js'
 import { renderBlockAuth } from './render.js'
 
 const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
@@ -18,7 +18,6 @@ export const fetchComments = () => {
             return response.json()
         })
         .then((responseData) => {
-
             return responseData.comments.map((comment) => ({
                 name: comment.author.name,
                 id: comment.id,
@@ -44,10 +43,18 @@ export const authorization = (login, password) => {
         }),
     })
         .then((response) => {
+            console.log(response)
+
             return response.json()
         })
         .then((responseData) => {
             console.log('возвращает сервер', responseData)
+            if (responseData) {
+                const nameData = responseData.user.name
+                const nameStr = nameData.slice(0, 1).toUpperCase() + nameData.slice(1).toLowerCase()
+                console.log(nameStr)
+                alert(`Добро пожаловать ${nameStr}`)
+            }
 
             const newData = {
                 id: responseData.user._id,
@@ -113,7 +120,6 @@ export const postComment = (text, retries = maxRetries) => {
     })
         .then((response) => {
             if (!response.ok) {
-                
                 if (response.status === 500 && retries > 0) {
                     alert(`Ошибка 500. Повторная отправка комментария... Осталось попыток: ${retries}`)
                     return postComment(text, name, retries - 1)
