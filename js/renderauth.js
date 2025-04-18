@@ -55,7 +55,6 @@ export const renderAuthorizationForm = () => {
 
             console.log(dataAuth)
             authorization(dataAuth.login, dataAuth.password).then(() => {
-                renderBlockAuth()
             })
         })
     })

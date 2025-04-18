@@ -8,10 +8,12 @@ import { renderRegistrationForm } from './renderreg.js'
 import { userData } from './userdata.js'
 
 export const renderComments = (userComments, container) => {
+    
     console.log(userComments)
     container.innerHTML = userComments
-        .map(
-            (comment) => `<li class="comment">
+    .map(
+        (comment) => 
+            `<li class="comment">
         <div class="comment-header">
           <div class="title">${escapeHtml(comment.name)}</div>
           <div>${formatDate(comment.date)}</div>
@@ -29,8 +31,8 @@ export const renderComments = (userComments, container) => {
           </div>
         </div>
       </li>`
-        )
-        .join('')
+    )
+    .join('')
 
     renderBlockAuth()
     addLikeButtonListeners(userComments)
@@ -39,6 +41,7 @@ export const renderComments = (userComments, container) => {
     deleteCommentEvent()
     renderAuthorizationForm()
     renderRegistrationForm()
+
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -56,6 +59,18 @@ export const addLikeButtonListeners = (userComments) => {
     const likeButtons = document.querySelectorAll('.like-button')
     const likeCounter = document.querySelectorAll('.likes-counter')
     likeButtons.forEach((button, index) => {
+        const comment = userComments[index]
+        const allCommnetsLike = userComments[index].isLiked
+        console.log(allCommnetsLike);
+        console.log(comment);
+        // debugger
+            if (allCommnetsLike) {
+            console.log(comment.isLiked);
+            button.classList.add('-active-like')
+        } else {
+            button.classList.remove('-active-like')
+        }
+        
         button.addEventListener('click', (event) => {
             if (!userData.token) {
                 // button.classList.remove('loading')
@@ -65,7 +80,6 @@ export const addLikeButtonListeners = (userComments) => {
 
             button.classList.add('loading')
             event.stopPropagation()
-            const comment = userComments[index]
 
             switchLike(comment.id)
                 .then((data) => {
@@ -75,8 +89,6 @@ export const addLikeButtonListeners = (userComments) => {
 
                 .then((like) => {
                     console.log(like)
-
-                    console.log(userComments.likes)
 
                     comment.likes = like.likes
                     comment.isLiked = like.isLiked
@@ -129,7 +141,11 @@ export const renderBlockAuth = () => {
         <div class="reg__btn button btn--close" >Регистрация</div>`
     }
 
+
+
     console.log('Блок авторизации отрисован')
+    renderAuthorizationForm()
+    renderRegistrationForm()
 }
 
 export const renderLike = (like) => {

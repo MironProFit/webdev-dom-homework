@@ -1,5 +1,5 @@
 import { fetchComments } from './api.js'
-import { renderComments, renderBlockAuth } from './render.js'
+import { renderComments, renderBlockAuth, addLikeButtonListeners } from './render.js'
 import { clearUserData } from './clearusedate.js'
 import { renderAuthorizationForm } from './renderauth.js'
 import { renderRegistrationForm } from './renderreg.js'
@@ -26,8 +26,8 @@ const wrapLoadingText = () => {
         })
     })
 }
-
-const updateUserComments = (newComments) => {
+ 
+export const updateUserComments = (newComments) => {
     userComments = newComments
     renderComments(userComments, container)
 }
@@ -50,4 +50,6 @@ renderBlockAuth()
 window.onload = () => {
     wrapLoadingText()
     fetchAndRender()
+    renderBlockAuth()
+    addLikeButtonListeners()
 }

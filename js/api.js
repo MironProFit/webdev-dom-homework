@@ -41,9 +41,15 @@ export const authorization = (login, password) => {
             login: login,
             password: password,
         }),
+
     })
         .then((response) => {
             console.log(response)
+            if (response.status === 400) {
+                alert('Вееденs некоректные данные ')
+                renderBlockAuth()
+                return 
+            }
 
             return response.json()
         })
@@ -71,7 +77,9 @@ export const authorization = (login, password) => {
                 console.log('рендер выполнен')
             })
         })
-        .catch((error) => console.log(error.massage))
+        .catch((error) => console.log(error.massage)
+        // .finally(() => renderBlockAuth())
+    )
 }
 
 export const registration = (login, name, password) => {
@@ -86,6 +94,11 @@ export const registration = (login, name, password) => {
         }),
     })
         .then((response) => {
+            if (response.status === 400) {
+                alert('Вееденs некоректные данные ')
+                renderBlockAuth()
+                return 
+            }
             console.log(response)
             return response.json()
         })
@@ -99,6 +112,9 @@ export const registration = (login, name, password) => {
             updateUserData(newData)
 
             return responseData, console.log(responseData), renderBlockAuth(), fetchAndRender()
+        })
+        .catch((error) => {
+            console.error(error.message)
         })
 }
 

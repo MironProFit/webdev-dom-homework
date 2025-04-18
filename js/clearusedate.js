@@ -18,6 +18,7 @@ export const clearUserData = () => {
                 }
                 updateUserData(newData)
                 console.log('данные авторизации очищены')
+                alert('Вы вышли из системы')
 
                 location.reload()
                 window.scrollTo(0, 0)
