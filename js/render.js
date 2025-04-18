@@ -8,12 +8,11 @@ import { renderRegistrationForm } from './renderreg.js'
 import { userData } from './userdata.js'
 
 export const renderComments = (userComments, container) => {
-    
     console.log(userComments)
     container.innerHTML = userComments
-    .map(
-        (comment) => 
-            `<li class="comment">
+        .map(
+            (comment) =>
+                `<li class="comment">
         <div class="comment-header">
           <div class="title">${escapeHtml(comment.name)}</div>
           <div>${formatDate(comment.date)}</div>
@@ -31,8 +30,8 @@ export const renderComments = (userComments, container) => {
           </div>
         </div>
       </li>`
-    )
-    .join('')
+        )
+        .join('')
 
     renderBlockAuth()
     addLikeButtonListeners(userComments)
@@ -41,7 +40,6 @@ export const renderComments = (userComments, container) => {
     deleteCommentEvent()
     renderAuthorizationForm()
     renderRegistrationForm()
-
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -60,60 +58,55 @@ export const addLikeButtonListeners = (userComments) => {
     const likeCounter = document.querySelectorAll('.likes-counter')
     likeButtons.forEach((button, index) => {
         const comment = userComments[index]
-        const allCommnetsLike = userComments[index].isLiked
-        console.log(allCommnetsLike);
-        console.log(comment);
-        // debugger
-            if (allCommnetsLike) {
-            console.log(comment.isLiked);
-            button.classList.add('-active-like')
-        } else {
-            button.classList.remove('-active-like')
-        }
-        
+        switchLike(comment.id).then((like) => {
+            comment.likes = like.likes
+            comment.isLiked = like.isLiked
+            console.log(like)
+            button.classList.toggle('-active-like', comment.isLiked)
+            likeCounter[index].textContent = `${comment.likes}`
+
+            if (userData.token) {
+                button.classList.toggle('-active-like', comment.isLiked)
+                console.log(comment.isLiked)
+                console.log(comment)
+                likeCounter[index].textContent = `${comment.likes}`
+            } else {
+                button.classList.remove('-active-like')
+            }
+        })
+
         button.addEventListener('click', (event) => {
             if (!userData.token) {
-                // button.classList.remove('loading')
                 alert('Недоступно без авторизации')
                 return
             }
-
+            // debugger
             button.classList.add('loading')
             event.stopPropagation()
 
+            const wasLiked = comment.isLiked
+            console.log(wasLiked)
+
             switchLike(comment.id)
-                .then((data) => {
-                    console.log(data)
-                    return data
+                .then((like) => {
+                    if (wasLiked) {
+                        comment.likes -= 1
+                    } else {
+                        comment.likes += 1
+                    }
+
+                    comment.isLiked = !wasLiked
+                    button.classList.toggle('-active-like', comment.isLiked)
+                    likeCounter[index].textContent = `${comment.likes}`
                 })
 
-                .then((like) => {
-                    console.log(like)
-
-                    comment.likes = like.likes
-                    comment.isLiked = like.isLiked
-
-                    if (comment.isLiked) {
-                        console.log('лайк активный')
-                        button.classList.add('-active-like')
-                    } else {
-                        console.log('лайк не активный')
-                        button.classList.remove('-active-like')
-                    }
-                    likeCounter[index].textContent = `${comment.likes}`
-                    console.log(comment.isLiked)
-                    console.log(comment.likes)
+                .finally(() => {
                     button.classList.remove('loading')
                 })
                 .catch((error) => {
                     console.error('ошибка обновления лайка', error)
                     alert('Не удалось обновить статус лайка. Попробуйте позжу')
-                    
 
-                    button.classList.remove('loading')
-                })
-                .finally(() => {
-                    
                     button.classList.remove('loading')
                 })
         })
@@ -140,8 +133,6 @@ export const renderBlockAuth = () => {
         authorButtonsContainer.innerHTML = `<div class="auth__btn button btn--close" >Вход</div>
         <div class="reg__btn button btn--close" >Регистрация</div>`
     }
-
-
 
     console.log('Блок авторизации отрисован')
     renderAuthorizationForm()
