@@ -1,6 +1,9 @@
 import { userData, updateUserData } from './userdata.js'
+import { fetchAndRender } from './index.js'
+import { renderBlockAuth } from './render.js'
 
-import {hostAuth, host} from './variables.js';
+const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
+const hostAuth = 'https://wedev-api.sky.pro/api/user'
 
 const maxRetries = 3
 
@@ -17,6 +20,7 @@ export const fetchComments = () => {
         .then((responseData) => {
             return responseData.comments.map((comment) => ({
                 name: comment.author.name,
+                id: comment.id,
                 date: comment.date,
                 text: comment.text,
                 likes: comment.likes,
@@ -29,18 +33,34 @@ export const fetchComments = () => {
 }
 
 export const authorization = (login, password) => {
+    console.log('запуск блока авторизации')
+
     return fetch(hostAuth + '/login', {
         method: 'POST',
         body: JSON.stringify({
             login: login,
             password: password,
         }),
+
     })
         .then((response) => {
+            console.log(response)
+            if (response.status === 400) {
+                alert('Вееденs некоректные данные ')
+                renderBlockAuth()
+                return 
+            }
+
             return response.json()
         })
         .then((responseData) => {
             console.log('возвращает сервер', responseData)
+            if (responseData) {
+                const nameData = responseData.user.name
+                const nameStr = nameData.slice(0, 1).toUpperCase() + nameData.slice(1).toLowerCase()
+                console.log(nameStr)
+                alert(`Добро пожаловать ${nameStr}`)
+            }
 
             const newData = {
                 id: responseData.user._id,
@@ -49,7 +69,17 @@ export const authorization = (login, password) => {
                 login: responseData.user.login,
             }
             updateUserData(newData)
+            console.log('данные обновлены')
+            renderBlockAuth()
+            console.log('перерисовываем блок авторизации')
+
+            fetchAndRender().then(() => {
+                console.log('рендер выполнен')
+            })
         })
+        .catch((error) => console.log(error.massage)
+        // .finally(() => renderBlockAuth())
+    )
 }
 
 export const registration = (login, name, password) => {
@@ -64,6 +94,11 @@ export const registration = (login, name, password) => {
         }),
     })
         .then((response) => {
+            if (response.status === 400) {
+                alert('Вееденs некоректные данные ')
+                renderBlockAuth()
+                return 
+            }
             console.log(response)
             return response.json()
         })
@@ -76,7 +111,10 @@ export const registration = (login, name, password) => {
             }
             updateUserData(newData)
 
-            return responseData, console.log(responseData)
+            return responseData, console.log(responseData), renderBlockAuth(), fetchAndRender()
+        })
+        .catch((error) => {
+            console.error(error.message)
         })
 }
 
@@ -116,20 +154,43 @@ export const postComment = (text, retries = maxRetries) => {
             return response.json()
         })
         .catch((error) => {
-            alert(error.message)
+            alert(error.massage)
             throw error
         })
 }
 
-export const deliteComment = (commentId) => {
-    return fetch(hostAuth + `/comments/${commentId}`, {
+export const deleteFetch = (commentId) => {
+    return fetch(host + `/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${userData.token}` },
         method: 'DELETE',
     })
-    .then((response) => {
-        return response.json()
-    }).then((responseData) => {
-        console.log(responseData);
-        return responseData
+        .then((response) => {
+            return response.json()
+        })
+        .then((responseData) => {
+            console.log(responseData)
+            fetchAndRender()
+            return responseData
+        })
+}
+
+export const switchLike = (likeId) => {
+    console.log(`/comments/${likeId}/toggle-like`)
+    console.log(likeId)
+    return fetch(host + `/comments/${likeId}/toggle-like`, {
+        headers: { Authorization: `Bearer ${userData.token}` },
+        method: 'POST',
     })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Что-то пошло не так')
+            }
+            return response.json()
+        })
+        .then((responseData) => {
+            return responseData.result
+        })
+        .catch((error) => {
+            console.log(error.message)
+        })
 }
