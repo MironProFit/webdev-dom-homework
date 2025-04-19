@@ -188,6 +188,7 @@ export const switchLike = (likeId) => {
             return response.json()
         })
         .then((responseData) => {
+            console.log(responseData.result);
             return responseData.result
         })
         .catch((error) => {

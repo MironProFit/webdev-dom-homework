@@ -6,6 +6,7 @@ import { switchLike } from './api.js'
 import { renderAuthorizationForm } from './renderauth.js'
 import { renderRegistrationForm } from './renderreg.js'
 import { userData } from './userdata.js'
+import { container } from './index.js'
 
 export const renderComments = (userComments, container) => {
     console.log(userComments)
@@ -25,8 +26,7 @@ export const renderComments = (userComments, container) => {
 
           <div class="likes">
             <span class="likes-counter">${comment.likes}</span>
-            <button class="like-button ${comment.isLiked}
-                 " data-id="${comment.id}"></button>
+            <button class="like-button ${comment.isLiked ? '.-active-like' : ''}" data-id="${comment.id}"></button>
           </div>
         </div>
       </li>`
@@ -34,12 +34,12 @@ export const renderComments = (userComments, container) => {
         .join('')
 
     renderBlockAuth()
-    addLikeButtonListeners(userComments)
     addClickEventToComments(userComments)
     clearUserData()
     deleteCommentEvent()
     renderAuthorizationForm()
     renderRegistrationForm()
+    addLikeButtonListeners(userComments)
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -58,57 +58,21 @@ export const addLikeButtonListeners = (userComments) => {
     const likeCounter = document.querySelectorAll('.likes-counter')
     likeButtons.forEach((button, index) => {
         const comment = userComments[index]
-        switchLike(comment.id).then((like) => {
-            comment.likes = like.likes
-            comment.isLiked = like.isLiked
-            console.log(like)
-            button.classList.toggle('-active-like', comment.isLiked)
             likeCounter[index].textContent = `${comment.likes}`
-
-            if (userData.token) {
-                button.classList.toggle('-active-like', comment.isLiked)
-                console.log(comment.isLiked)
-                console.log(comment)
-                likeCounter[index].textContent = `${comment.likes}`
-            } else {
-                button.classList.remove('-active-like')
+            console.log(comment.isLiked);
+            if (comment.isLiked) {
+                button.classList.add('-active-like')
             }
-        })
-
-        button.addEventListener('click', (event) => {
-            if (!userData.token) {
-                alert('Недоступно без авторизации')
-                return
-            }
-            // debugger
-            button.classList.add('loading')
-            event.stopPropagation()
-
-            const wasLiked = comment.isLiked
-            console.log(wasLiked)
-
-            switchLike(comment.id)
-                .then((like) => {
-                    if (wasLiked) {
-                        comment.likes -= 1
-                    } else {
-                        comment.likes += 1
-                    }
-
-                    comment.isLiked = !wasLiked
-                    button.classList.toggle('-active-like', comment.isLiked)
-                    likeCounter[index].textContent = `${comment.likes}`
-                })
-
-                .finally(() => {
-                    button.classList.remove('loading')
-                })
-                .catch((error) => {
-                    console.error('ошибка обновления лайка', error)
-                    alert('Не удалось обновить статус лайка. Попробуйте позжу')
-
-                    button.classList.remove('loading')
-                })
+        button.addEventListener('click', () => {
+            switchLike(comment.id).then((result) => {
+                console.log(result.likes)
+                console.log(result.isLiked)
+                likeCounter[index].textContent = `${result.likes}`
+                if (result.isLiked) {
+                    button.classList.add('-active-like')
+                }
+            })
+            // const likeId = button.getAttribute('data-id')
         })
     })
 }
@@ -139,10 +103,10 @@ export const renderBlockAuth = () => {
     renderRegistrationForm()
 }
 
-export const renderLike = (like) => {
-    like.comments.map((comment) => ({
-        id: comment.id,
-        likes: comment.likes,
-        isLiked: false,
-    }))
-}
+// export const renderLike = (like) => {
+//     like.comments.map((comment) => ({
+//         id: comment.id,
+//         likes: comment.likes,
+//         isLiked: false,
+//     }))
+// }

@@ -51,5 +51,5 @@ window.onload = () => {
     wrapLoadingText()
     fetchAndRender()
     renderBlockAuth()
-    addLikeButtonListeners()
+    // addLikeButtonListeners()
 }
