@@ -4,7 +4,8 @@ import { inputComment, fetchAndRender } from './index.js'
 import { deleteFetch, postComment } from './api.js'
 
 export const quoteComment = () => {
-    buttonInput.addEventListener('click', () => {
+    buttonInput.addEventListener('click', (event) => {
+        event.stopPropagation()
         if (!validateInput(inputComment)) {
             return
         }
@@ -34,7 +35,8 @@ export const deleteCommentEvent = () => {
     console.log(`Кнопок удаления найдено ${delBtn.length}`)
     if (delBtn.length > 0) {
         delBtn.forEach((btn, index) => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (event) => {
+                event.stopPropagation()
                 console.log(btn)
                 console.log(`нажата кнопка с id:${index}`)
                 const commentId = userComments[index].id

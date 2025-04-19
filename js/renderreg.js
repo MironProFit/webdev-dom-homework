@@ -1,4 +1,7 @@
 import { registration } from './api.js'
+import { fetchAndRender } from './index.js'
+import { renderResizeAuth, resetResizeAuth, renderBlockAuth, renderNameComment } from './render.js'
+import { userData } from './userdata.js'
 
 export const renderRegistrationForm = () => {
     const authorButtonsContainer = document.getElementById('authorization')
@@ -17,10 +20,15 @@ export const renderRegistrationForm = () => {
     regButton.addEventListener('click', (event) => {
         console.log('нажата кнопка регистрации')
         event.stopPropagation()
+        const container = document.getElementById('list')
+
         const btnAuthContainer = document.querySelectorAll('.btn--close')
         btnAuthContainer.forEach((button) => {
+            container.style.display = 'none'
             button.style.display = 'none'
         })
+        renderResizeAuth()
+
         if (!formRendered) {
             authorButtonsContainer.innerHTML = `<input
           id="login"
@@ -61,7 +69,23 @@ export const renderRegistrationForm = () => {
                     name: inputName.value,
                     password: inputPass.value,
                 }
-                registration(dataAuth.login, dataAuth.name, dataAuth.password).catch((error) => console.error(error))
+                registration(dataAuth.login, dataAuth.name, dataAuth.password)
+                    .then(() => {
+                        console.log(userData)
+                        if (userData && userData.token) {
+                            renderBlockAuth()
+                            console.log('renderBlockAuth выполнено!')
+                            resetResizeAuth()
+                            fetchAndRender()
+                            container.style.display = 'flex'
+
+                            console.log('resetResizeAuth выполнено!')
+                            renderNameComment()
+                        } else {
+                            return
+                        }
+                    })
+                    .catch((error) => console.error(error))
             })
         }
     })

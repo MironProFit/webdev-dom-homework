@@ -33,6 +33,7 @@ export const renderComments = (userComments, container) => {
         )
         .join('')
 
+    renderNameComment()
     renderBlockAuth()
     addClickEventToComments(userComments)
     clearUserData()
@@ -40,6 +41,7 @@ export const renderComments = (userComments, container) => {
     renderAuthorizationForm()
     renderRegistrationForm()
     addLikeButtonListeners(userComments)
+    console.log('Комментарии отрисованы')
 }
 
 export const addClickEventToComments = (userComments) => {
@@ -53,17 +55,29 @@ export const addClickEventToComments = (userComments) => {
     })
 }
 
+export const renderNameComment = () => {
+    const inputName = document.getElementById('input-name')
+    console.log(userData.name)
+    if (inputName && userData && userData.token) {
+        inputName.value = userData.name
+        console.log('Имя перезаписано')
+    } else {
+        return
+    }
+}
+
 export const addLikeButtonListeners = (userComments) => {
     const likeButtons = document.querySelectorAll('.like-button')
     const likeCounter = document.querySelectorAll('.likes-counter')
     likeButtons.forEach((button, index) => {
         const comment = userComments[index]
-            likeCounter[index].textContent = `${comment.likes}`
-            console.log(comment.isLiked);
-            if (comment.isLiked) {
-                button.classList.add('-active-like')
-            }
-        button.addEventListener('click', () => {
+        likeCounter[index].textContent = `${comment.likes}`
+        console.log(comment.isLiked)
+        if (comment.isLiked) {
+            button.classList.add('-active-like')
+        }
+        button.addEventListener('click', (event) => {
+            event.stopPropagation()
             switchLike(comment.id).then((result) => {
                 console.log(result.likes)
                 console.log(result.isLiked)
@@ -79,6 +93,7 @@ export const addLikeButtonListeners = (userComments) => {
 
 export const renderBlockAuth = () => {
     const authorButtonsContainer = document.getElementById('authorization')
+
     if (userData && userData && userData.token.length > 2) {
         console.log('Пользователь АВТОРИЗОВАН!!!!')
         authorButtonsContainer.innerHTML = `<div class="exit__btn button btn--close">Выход</div>`
@@ -99,14 +114,45 @@ export const renderBlockAuth = () => {
     }
 
     console.log('Блок авторизации отрисован')
+
     renderAuthorizationForm()
     renderRegistrationForm()
 }
 
-// export const renderLike = (like) => {
-//     like.comments.map((comment) => ({
-//         id: comment.id,
-//         likes: comment.likes,
-//         isLiked: false,
-//     }))
-// }
+export const renderResizeAuth = async () => {
+    const authorButtonsContainer = document.getElementById('authorization')
+    authorButtonsContainer.style.height = '450px'
+    authorButtonsContainer.style.paddingRight = '50px'
+    authorButtonsContainer.style.paddingLeft = '50px'
+    authorButtonsContainer.style.flexDirection = 'column'
+    // authorButtonsContainer.style.
+
+    const buttonInputLogPass = document.querySelector('.button-input')
+
+    // buttonInputLogPass.style.width = '50%'
+
+    const inputForm = document.querySelectorAll('.input-form')
+    inputForm.forEach((element) => {
+        element.style.width = '10%'
+    })
+    return
+}
+
+export const resetResizeAuth = () => {
+    const authorButtonsContainer = document.getElementById('authorization')
+    if (authorButtonsContainer) {
+        authorButtonsContainer.style.height = ''
+        authorButtonsContainer.style.paddingRight = ''
+        authorButtonsContainer.style.paddingLeft = ''
+        authorButtonsContainer.style.flexDirection = ''
+        // authorButtonsContainer.style.
+    }
+
+    const buttonInputLogPass = document.querySelector('.button-input')
+    if (buttonInputLogPass) {
+        buttonInputLogPass.style.width = ''
+        console.log('Очищены стили')
+        // return
+    }
+    return
+}

@@ -1,5 +1,5 @@
 import { userData, updateUserData } from './userdata.js'
-import { fetchAndRender } from './index.js'
+import { fetchAndRender, getNewDateFromAuth } from './index.js'
 import { renderBlockAuth } from './render.js'
 
 const host = 'https://wedev-api.sky.pro/api/v2/Miron_MPF'
@@ -34,51 +34,51 @@ export const fetchComments = () => {
 
 export const authorization = (login, password) => {
     console.log('запуск блока авторизации')
-
-    return fetch(hostAuth + '/login', {
-        method: 'POST',
-        body: JSON.stringify({
-            login: login,
-            password: password,
-        }),
-
-    })
-        .then((response) => {
-            console.log(response)
-            if (response.status === 400) {
-                alert('Вееденs некоректные данные ')
-                renderBlockAuth()
-                return 
-            }
-
-            return response.json()
+    return (
+        fetch(hostAuth + '/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                login: login,
+                password: password,
+            }),
         })
-        .then((responseData) => {
-            console.log('возвращает сервер', responseData)
-            if (responseData) {
-                const nameData = responseData.user.name
-                const nameStr = nameData.slice(0, 1).toUpperCase() + nameData.slice(1).toLowerCase()
-                console.log(nameStr)
-                alert(`Добро пожаловать ${nameStr}`)
-            }
-
-            const newData = {
-                id: responseData.user._id,
-                token: responseData.user.token,
-                name: responseData.user.name,
-                login: responseData.user.login,
-            }
-            updateUserData(newData)
-            console.log('данные обновлены')
-            renderBlockAuth()
-            console.log('перерисовываем блок авторизации')
-
-            fetchAndRender().then(() => {
-                console.log('рендер выполнен')
+            .then((response) => {
+                console.log(response)
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        throw new Error('Некорректные данные или проблема на севере')
+                    } else {
+                        throw new Error(`Ошибка ${response.status} ${response.statusText}`)
+                    }
+                } else {
+                    return response.json()
+                }
             })
-        })
-        .catch((error) => console.log(error.massage)
-        // .finally(() => renderBlockAuth())
+            .then((responseData) => {
+               
+                    console.log(responseData)
+                    const newData = {
+                        id: responseData.user._id,
+                        token: responseData.user.token,
+                        name: responseData.user.name,
+                        login: responseData.user.login,
+                    }
+
+                    getNewDateFromAuth(newData)
+                    updateUserData(newData)
+                    console.log('данные обновлены')
+                    renderBlockAuth()
+                    console.log('перерисовываем блок авторизации')
+                    return responseData
+            })
+            
+            .catch((error) =>
+                console.log(
+                    error.message,
+                    alert(error.message)
+                    // .finally(() => renderBlockAuth())
+                )
+            )
     )
 }
 
@@ -96,8 +96,7 @@ export const registration = (login, name, password) => {
         .then((response) => {
             if (response.status === 400) {
                 alert('Вееденs некоректные данные ')
-                renderBlockAuth()
-                return 
+                return
             }
             console.log(response)
             return response.json()
@@ -188,7 +187,7 @@ export const switchLike = (likeId) => {
             return response.json()
         })
         .then((responseData) => {
-            console.log(responseData.result);
+            console.log(responseData.result)
             return responseData.result
         })
         .catch((error) => {

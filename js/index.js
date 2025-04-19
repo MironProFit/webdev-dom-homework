@@ -26,7 +26,7 @@ const wrapLoadingText = () => {
         })
     })
 }
- 
+
 export const updateUserComments = (newComments) => {
     userComments = newComments
     renderComments(userComments, container)
@@ -46,6 +46,16 @@ renderRegistrationForm()
 quoteComment()
 deleteCommentEvent()
 renderBlockAuth()
+
+export const getNewDateFromAuth = (newData) => {
+    console.log('возвращает сервер', newData)
+    if (newData) {
+        const nameData = newData.name
+        const nameStr = nameData.slice(0, 1).toUpperCase() + nameData.slice(1).toLowerCase()
+        console.log(nameStr)
+        alert(`Добро пожаловать ${nameStr}`)
+    }
+}
 
 window.onload = () => {
     wrapLoadingText()
