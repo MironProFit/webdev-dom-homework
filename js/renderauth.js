@@ -1,13 +1,32 @@
+import { authorization } from './api.js'
+import { fetchAndRender } from './index.js'
+import { renderResizeAuth, resetResizeAuth, renderBlockAuth, renderNameComment } from './render.js'
+import { userData } from './userdata.js'
+
 export const renderAuthorizationForm = () => {
+    console.log('Активирована функция аторизвции')
     const authorButtonsContainer = document.getElementById('authorization')
     let formRendered = false
-    const authBtutton = document.querySelector('.auth__btn')
-    authBtutton.addEventListener('click', (event) => {
+
+    const authButton = document.querySelector('.auth__btn')
+    if (authButton) {
+        console.log('Кнопка авторизации найдена')
+    } else {
+        console.log('Кнопка авторизации не найдена')
+        return
+    }
+
+    authButton.addEventListener('click', (event) => {
+        console.log('кнопка входа нажата')
         event.stopPropagation()
+        const container = document.getElementById('list')
         const btnAuthContainer = document.querySelectorAll('.btn--close')
         btnAuthContainer.forEach((button) => {
+            container.style.display = 'none'
             button.style.display = 'none'
         })
+        renderResizeAuth()
+
         if (!formRendered) {
             authorButtonsContainer.innerHTML = `<input
           id="login"
@@ -22,8 +41,8 @@ export const renderAuthorizationForm = () => {
           placeholder="Введите ваш пароль"
         >
         <button class="button-input button">Вход</button>
-
         `
+
             const loginInput = document.getElementById('login')
             if (loginInput) {
                 loginInput.focus()
@@ -39,12 +58,27 @@ export const renderAuthorizationForm = () => {
                 login: inputLogin.value,
                 password: inputPass.value,
             }
-            authorization(dataAuth.login, dataAuth.password).then(() => {
-                console.log(userData)
-                closeWindowInputComment()
-            })
+
+            console.log(dataAuth)
+            authorization(dataAuth.login, dataAuth.password)
+                .then(() => {
+                    console.log(userData)
+                    if (userData && userData.token) {
+                        renderBlockAuth()
+                        console.log('renderBlockAuth выполнено!')
+                        resetResizeAuth()
+                        fetchAndRender()
+                        container.style.display = 'flex'
+
+                        console.log('resetResizeAuth выполнено!')
+                        renderNameComment()
+
+                    } else {
+                        return
+                    }
+                })
+                
+                .catch((error) => alert(error.massage))
         })
     })
 }
-
-renderAuthorizationForm()

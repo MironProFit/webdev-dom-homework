@@ -158,6 +158,7 @@ body {
 .add-form-name,
 .add-form-text,
 .input-form {
+    
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
@@ -203,17 +204,16 @@ body {
     font-size: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
-    width: 100%;
+    /* width: 30%; */
     height: 40px;
 }
 .button:hover {
     opacity: 0.9;
 }
 
-.del-comment {
+/* .del-comment {
     width: 20%;
-    
-}
+} */
 
 .add-form-button:hover {
     opacity: 0.9;
@@ -234,6 +234,7 @@ body {
     border-radius: 20px;
     margin-bottom: 48px;
     margin-top: 48px;
+    transition: 1s;
 }
 .input-form {
     text-align: center;
@@ -243,20 +244,16 @@ body {
     width: 100%;
     height: 40px;
 }
-#clear-data {
-    z-index: 9999;
-    position: fixed;
-    right: 0;
-    background: url(../src/free-icon-dustbin-2415032.png);
-    width: 50px;
-    height: 50px;
-    background-size: contain;
-    cursor: pointer;
-}
-#clear-data:hover {
-    opacity: 0.5;
-}
 
 .window-input {
     display: flex;
+}
+
+.auth__btn,
+.reg__btn {
+    width: 30%;
+}
+
+.exit__btn {
+    width: 30%;
 }

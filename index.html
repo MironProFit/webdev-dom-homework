@@ -13,11 +13,11 @@
 
     </div>
     <div class="container">
-      <div id="clear-data"></div>
       <div id="authorization" class="auth" >
-        <button class="auth__btn button btn--close">Вход</button>
-        <button class="reg__btn button btn--close">Регистрация</button>
-        <!-- <button class="all-users__btn button">Показать всех пользователей</button> -->
+        <!-- <div class="auth__btn button btn--close" >Вход</div>
+        <div class="reg__btn button btn--close" >Регистрация</div>
+        <div class="exit__btn button btn--close">Выход</div> -->
+        <!-- <div class="all-users__btn button" >Показать всех пользователей</div> -->
       </div>
       <ul id="list" class="comments">
         <div class="loading-message">Подождите, идет загрузка комментариев...</div>
@@ -57,12 +57,14 @@
         </li> -->
       </ul>
       <div class="add-form window-input" id="name">
-        <!-- <input
+        <input
           id="input-name"
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
-        /> -->
+          value="Имя пользователя"
+          readonly
+        />
         <textarea
           id="input-comment"
           type="textarea"
@@ -78,5 +80,5 @@
     </div>
   </body>
 
-  <script type="module" src="./js/index.js"></script>
+  <script  src="./dist/main.js"></script>
 </html>

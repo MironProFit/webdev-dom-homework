@@ -20,5 +20,3 @@ export const hideLoading = (loadingInterval) => {
     loader.textContent = 'Загрузка'
     loadingOverlay.style.display = 'none'
 }
-
-
